@@ -10,21 +10,14 @@ mod vec;
 use std::io::Result;
 
 use crate::{
-    camera::Camera,
+    camera::{Camera, Window},
     color::Color,
     material::{dielectric, lambertian, metal},
     ray::{Sphere, World},
     vec::Point3,
 };
 
-fn size(width: u32, aspect_ratio: f64) -> (u32, u32) {
-    let height = ((width as f64 / aspect_ratio) as u32).max(1);
-    (width, height)
-}
-
 fn main() -> Result<()> {
-    let (width, height) = size(800, 16. / 9.);
-
     let material_ground = lambertian(Color::new(0.8, 0.8, 0.0));
     let material_center = lambertian(Color::new(0.1, 0.2, 0.5));
     let material_left = dielectric(1.5);
@@ -39,9 +32,16 @@ fn main() -> Result<()> {
     ));
     world.add(Sphere::new(Point3::new(0., 0., -1.2), 0.5, material_center));
     world.add(Sphere::new(Point3::new(-1.0, 0., -1.), 0.5, material_left));
-    world.add(Sphere::new(Point3::new(-1.0, 0., -1.), 0.4, material_bubble));
+    world.add(Sphere::new(
+        Point3::new(-1.0, 0., -1.),
+        0.4,
+        material_bubble,
+    ));
     world.add(Sphere::new(Point3::new(1.0, 0., -1.), 0.5, material_right));
 
-    let camera = Camera::new(width, height);
-    camera.render(&world)
+    let camera = Camera::builder()
+        .window(Window::with_aspect_ratio(900, 16. / 9.))
+        .build();
+
+    camera.render(&world).write_p3("image.ppm")
 }

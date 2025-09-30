@@ -6,23 +6,36 @@ use std::{
 
 use crate::color::Color;
 
-pub struct Image {}
+pub struct Image {
+    width: u32,
+    height: u32,
+    data: Vec<Color>,
+}
 
 impl Image {
-    pub fn write<P, F>(path: P, width: u32, height: u32, color: F) -> Result<()>
+    pub fn new(width: u32, height: u32, data: Vec<Color>) -> Option<Self> {
+        if width * height != data.len() as u32 {
+            return None;
+        }
+
+        Some(Self {
+            width,
+            height,
+            data,
+        })
+    }
+
+    pub fn write_p3<P>(&self, path: P) -> Result<()>
     where
         P: AsRef<Path>,
-        F: Fn(u32, u32) -> Color,
     {
         let file = File::create(path)?;
         let mut writer = BufWriter::new(file);
 
-        write!(writer, "P3\n{} {}\n255\n", width, height)?;
+        writeln!(writer, "P3\n{} {}\n255", self.width, self.height)?;
 
-        for j in 0..height {
-            for i in 0..width {
-                color(i, j).write(&mut writer)?;
-            }
+        for pixel in &self.data {
+            pixel.write(&mut writer)?;
         }
 
         writer.flush()

@@ -49,10 +49,6 @@ impl World {
     {
         self.objects.push(Box::new(object));
     }
-
-    pub fn clear(&mut self) {
-        self.objects.clear();
-    }
 }
 
 impl Hitable for World {

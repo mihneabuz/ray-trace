@@ -23,6 +23,6 @@ impl Color {
         let ig = (intensity.clamp(g) * 255.999) as i32;
         let ib = (intensity.clamp(b) * 255.999) as i32;
 
-        write!(writer, "{ir} {ig} {ib}\n")
+        writeln!(writer, "{ir} {ig} {ib}")
     }
 }

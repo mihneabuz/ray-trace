@@ -18,11 +18,7 @@ pub fn sample_square() -> Vec3 {
     Vec3::new(rand() - 0.5, rand() - 0.5, 0.)
 }
 
-pub fn rand_vec() -> Vec3 {
-    Vec3::new(rand(), rand(), rand())
-}
-
-pub fn rand_vec_range(min: f64, max: f64) -> Vec3 {
+pub fn rand_vec(min: f64, max: f64) -> Vec3 {
     Vec3::new(
         rand_range(min, max),
         rand_range(min, max),
@@ -32,17 +28,12 @@ pub fn rand_vec_range(min: f64, max: f64) -> Vec3 {
 
 pub fn rand_vec_unit() -> Vec3 {
     loop {
-        let v = rand_vec_range(-1., 1.);
+        let v = rand_vec(-1., 1.);
         let len = v.length_squared();
         if 1e-160 < len && len <= 1. {
             return v / len.sqrt();
         }
     }
-}
-
-pub fn rand_vec_on_hemisphere(normal: &Vec3) -> Vec3 {
-    let v = rand_vec_unit();
-    if v.dot(normal) > 0. { v } else { -v }
 }
 
 pub fn reflect(v: &Vec3, normal: &Vec3) -> Vec3 {

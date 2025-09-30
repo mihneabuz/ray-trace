@@ -51,14 +51,6 @@ impl Vec3 {
         self.x() * rhs.x() + self.y() * rhs.y() + self.z() * rhs.z()
     }
 
-    pub fn cross(&self, rhs: &Self) -> Self {
-        Self::new(
-            self.y() * rhs.z() - self.z() * rhs.y(),
-            self.z() * rhs.x() - self.x() * rhs.z(),
-            self.x() * rhs.y() - self.y() * rhs.x(),
-        )
-    }
-
     pub fn unit(&self) -> Self {
         *self / self.length()
     }

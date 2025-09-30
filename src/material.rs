@@ -39,10 +39,10 @@ impl Material for Labertian {
             direction = hit.normal;
         }
 
-        return Some(Scatter {
+        Some(Scatter {
             ray: Ray::new(hit.point, direction),
             attenuation: self.albedo,
-        });
+        })
     }
 }
 
@@ -60,10 +60,10 @@ impl Material for Metal {
             return None;
         }
 
-        return Some(Scatter {
+        Some(Scatter {
             ray: Ray::new(hit.point, reflected),
             attenuation: self.albedo,
-        });
+        })
     }
 }
 
@@ -90,10 +90,10 @@ impl Material for Dielectric {
             util::refract(&unit_direction, &hit.normal, ri)
         };
 
-        return Some(Scatter {
+        Some(Scatter {
             ray: Ray::new(hit.point, direction),
             attenuation: Color::one(),
-        });
+        })
     }
 }
 
